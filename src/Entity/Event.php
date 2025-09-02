@@ -50,6 +50,8 @@ class Event
 
     /**
      * @ORM\Column(type="json", nullable=false, options={"jsonb": true})
+     *
+     * @var array<string, mixed>
      */
     private array $payload;
 
@@ -63,6 +65,9 @@ class Event
      */
     private ?string $comment;
 
+    /**
+     * @param array<string, mixed> $payload
+     */
     public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
     {
         $this->id = $id;
@@ -89,6 +94,11 @@ class Event
         return $this->type;
     }
 
+    public function count(): int
+    {
+        return $this->count;
+    }
+
     public function actor(): Actor
     {
         return $this->actor;
@@ -99,6 +109,9 @@ class Event
         return $this->repo;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function payload(): array
     {
         return $this->payload;

@@ -65,6 +65,9 @@ class Actor
         return $this->avatarUrl;
     }
 
+    /**
+     * @param array{id: int|string, login: string, url: string, avatar_url: string} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

@@ -7,16 +7,17 @@ use App\Repository\ReadEventRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class SearchController
 {
     private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
+    private SerializerInterface|DenormalizerInterface $serializer;
 
     public function __construct(
         ReadEventRepository $repository,
-        SerializerInterface $serializer,
+        SerializerInterface|DenormalizerInterface $serializer,
     ) {
         $this->repository = $repository;
         $this->serializer = $serializer;

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class EventMapperTest extends TestCase
 {
-    private readonly MockObject&EntityManagerInterface $entityManager;
+    private MockObject&EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
@@ -38,6 +38,7 @@ class EventMapperTest extends TestCase
                 Event::class => $knownEvent,
                 Actor::class => $knownActor,
                 Repo::class => $knownRepo,
+                default => throw new \RuntimeException('unknown entity class'),
             });
 
         $mapper = new EventMapper($this->entityManager);
@@ -214,6 +215,11 @@ class EventMapperTest extends TestCase
         self::assertNull($actual);
     }
 
+    /**
+     * @param array{id: int|string, login: string, url: string, avatar_url: string}|array{} $actor
+     * @param array{id: int|string, name: string, url: string}|array{}                      $repo
+     * @param array<string, mixed>                                                          $payload
+     */
     private static function createGitHubArchiveEvent(
         string $type = 'PushEvent',
         array $actor = [],
