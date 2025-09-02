@@ -3,9 +3,7 @@
 namespace App\Repository;
 
 use App\Dto\EventInput;
-use App\Dto\SearchInput;
 use Doctrine\DBAL\Connection;
-use phpDocumentor\Reflection\DocBlock\Tags\Author;
 
 class DbalWriteEventRepository implements WriteEventRepository
 {
