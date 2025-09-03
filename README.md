@@ -72,6 +72,13 @@ make db-test
 make func-test
 ```
 
+### Quality tools
+
+You can run quality tools (PHP-CS-Fixer, PHPStan...) with the following command:
+```bash
+make lint
+```
+
 ### Stop the development environment
 
 You can stop the development environment running this command:
