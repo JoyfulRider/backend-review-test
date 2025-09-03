@@ -3,20 +3,20 @@
 namespace App\Tests\Func;
 
 use App\DataFixtures\EventFixtures;
-use App\Entity\Event;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EventControllerTest extends WebTestCase
 {
     protected AbstractDatabaseTool $databaseTool;
-    private static $client;
+    private static KernelBrowser $client;
 
     protected function setUp(): void
     {
-        static::$client = static::createClient();
+        self::$client = static::createClient();
 
         $entityManager = static::getContainer()->get('doctrine.orm.entity_manager');
         $metaData = $entityManager->getMetadataFactory()->getAllMetadata();
@@ -30,9 +30,9 @@ class EventControllerTest extends WebTestCase
         );
     }
 
-    public function testUpdateShouldReturnEmptyResponse()
+    public function testUpdateShouldReturnEmptyResponse(): void
     {
-        $client = static::$client;
+        $client = self::$client;
 
         $client->request(
             'PUT',
@@ -43,13 +43,12 @@ class EventControllerTest extends WebTestCase
             json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
         );
 
-        $this->assertResponseStatusCodeSame(204);
+        self::assertResponseStatusCodeSame(204);
     }
 
-
-    public function testUpdateShouldReturnHttpNotFoundResponse()
+    public function testUpdateShouldReturnHttpNotFoundResponse(): void
     {
-        $client = static::$client;
+        $client = self::$client;
 
         $client->request(
             'PUT',
@@ -60,7 +59,7 @@ class EventControllerTest extends WebTestCase
             json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
         );
 
-        $this->assertResponseStatusCodeSame(404);
+        self::assertResponseStatusCodeSame(404);
 
         $expectedJson = <<<JSON
               {
@@ -74,9 +73,9 @@ class EventControllerTest extends WebTestCase
     /**
      * @dataProvider providePayloadViolations
      */
-    public function testUpdateShouldReturnBadRequest(string $payload, string $expectedResponse)
+    public function testUpdateShouldReturnBadRequest(string $payload, string $expectedResponse): void
     {
-        $client = static::$client;
+        $client = self::$client;
 
         $client->request(
             'PUT',
@@ -89,23 +88,24 @@ class EventControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(400);
         self::assertJsonStringEqualsJsonString($expectedResponse, $client->getResponse()->getContent());
-
     }
 
+    /**
+     * @return iterable<string, array{string, string}>
+     */
     public function providePayloadViolations(): iterable
     {
         yield 'comment too short' => [
             <<<JSON
-              {
-                "comment": "short"
-                
+            {
+              "comment": "short"
             }
             JSON,
             <<<JSON
-                {
-                    "message": "This value is too short. It should have 20 characters or more."
-                }
-            JSON
+            {
+              "message": "This value is too short. It should have 20 characters or more."
+            }
+            JSON,
         ];
     }
 }

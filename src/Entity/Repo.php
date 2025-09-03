@@ -8,13 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="repo")
  */
 class Repo
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="bigint")
+     *
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private int $id;
@@ -51,6 +54,9 @@ class Repo
         return $this->url;
     }
 
+    /**
+     * @param array{id: int|string, name: string, url: string} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

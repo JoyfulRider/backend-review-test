@@ -110,3 +110,11 @@ func-test: var/docker.up ## Run PhpUnit functionnal testsuite
 	@$(call log,Running ...)
 	$(PHP_EXEC) bin/phpunit -v --testsuite func --testdox
 	@$(call log_success,Done)
+
+.PHONY: lint
+lint: vendor
+	@$(call log,Running PHP-CS-Fixer...)
+	@$(PHP_RUN) vendor/bin/php-cs-fixer fix -v --diff
+	@$(call log,Running PHPStan...)
+	@$(PHP_RUN) vendor/bin/phpstan analyze --memory-limit=1G -v
+	@$(call log_success,Done)

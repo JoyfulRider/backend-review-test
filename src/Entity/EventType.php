@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
 
+/**
+ * @extends AbstractEnumType<string, string>
+ */
 class EventType extends AbstractEnumType
 {
-    public const COMMIT = 'COM';
-    public const COMMENT = 'MSG';
-    public const PULL_REQUEST = 'PR';
+    public const string COMMIT = 'COM';
+    public const string COMMENT = 'MSG';
+    public const string PULL_REQUEST = 'PR';
 
     protected static array $choices = [
         self::COMMIT => 'Commit',

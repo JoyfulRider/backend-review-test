@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Webmozart\Assert\Assert;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="`event`",
  *    indexes={@ORM\Index(name="IDX_EVENT_TYPE", columns={"type"})}
  * )
@@ -17,7 +17,9 @@ class Event
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="bigint")
+     *
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private int $id;
@@ -34,18 +36,22 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Actor", cascade={"persist"})
+     *
      * @ORM\JoinColumn(name="actor_id", referencedColumnName="id")
      */
     private Actor $actor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Repo", cascade={"persist"})
+     *
      * @ORM\JoinColumn(name="repo_id", referencedColumnName="id")
      */
     private Repo $repo;
 
     /**
      * @ORM\Column(type="json", nullable=false, options={"jsonb": true})
+     *
+     * @var array<string, mixed>
      */
     private array $payload;
 
@@ -59,6 +65,9 @@ class Event
      */
     private ?string $comment;
 
+    /**
+     * @param array<string, mixed> $payload
+     */
     public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
     {
         $this->id = $id;
@@ -70,7 +79,7 @@ class Event
         $this->createAt = $createAt;
         $this->comment = $comment;
 
-        if ($type === EventType::COMMIT) {
+        if (EventType::COMMIT === $type) {
             $this->count = $payload['size'] ?? 1;
         }
     }
@@ -85,6 +94,11 @@ class Event
         return $this->type;
     }
 
+    public function count(): int
+    {
+        return $this->count;
+    }
+
     public function actor(): Actor
     {
         return $this->actor;
@@ -95,6 +109,9 @@ class Event
         return $this->repo;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function payload(): array
     {
         return $this->payload;
